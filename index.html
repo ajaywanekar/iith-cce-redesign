@@ -2,16 +2,16 @@
 <html lang="en">
 <head>
 <meta name="robots" content="noindex, nofollow">
-<base href="https://cce.iith.ac.in/">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Driving Organisational Effectiveness | Executive Retreat – IIT Hyderabad</title>
 <meta name="description" content="A residential executive retreat by DSSI Studios, Department of Design, IIT Hyderabad. Put a number on your organisation's Friction Tax and leave with a costed diagnosis and a 30-day pilot plan. Limited to 20 seats.">
 <meta property="og:title" content="Driving Organisational Effectiveness Through Employee Experience – IIT Hyderabad">
 <meta property="og:description" content="Residential executive retreat · DSSI Studios, IITH · 10 practical tools · Certificate from IIT Hyderabad · Limited to 20 seats.">
-<meta property="og:image" content="https://cce.iith.ac.in/img/homepage/home_2.jpg">
+<meta property="og:image" content="https://ajaywanekar.github.io/iith-cce-redesign/assets/og-image.jpg">
 <meta property="og:type" content="website">
-<link rel="icon" href="img/favicon.ico">
+<link rel="icon" href="https://cce.iith.ac.in/img/favicon.ico">
+<link rel="preload" as="image" href="assets/hero.webp" fetchpriority="high">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -55,7 +55,7 @@ h1,h2,h3{line-height:1.2;margin:0}
 
 /* ---------- HERO ---------- */
 .hero{position:relative;color:#fff;overflow:hidden;
-  background:linear-gradient(100deg,rgba(20,18,70,.94) 0%,rgba(36,32,120,.86) 45%,rgba(36,32,120,.35) 100%),url("img/homepage/home_2.jpg") center/cover no-repeat}
+  background:linear-gradient(100deg,rgba(20,18,70,.94) 0%,rgba(36,32,120,.86) 45%,rgba(36,32,120,.35) 100%),url("assets/hero.webp") center/cover no-repeat}
 .hero .wrap{padding-top:90px;padding-bottom:110px;display:grid;grid-template-columns:1.25fr .75fr;gap:48px;align-items:center}
 .hero .tag{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:13px;font-weight:500}
 .hero .tag b{color:var(--gold)}
@@ -109,7 +109,7 @@ h1,h2,h3{line-height:1.2;margin:0}
 
 /* ---------- GALLERY ---------- */
 .gallery{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
-.gallery div{aspect-ratio:4/3;border-radius:14px;background-image:url("img/gallery/driving.jpeg");background-size:400% auto;background-repeat:no-repeat;box-shadow:var(--shadow)}
+.gallery div{aspect-ratio:4/3;border-radius:14px;background-image:url("assets/gallery.webp");background-size:400% auto;background-repeat:no-repeat;box-shadow:var(--shadow)}
 .gallery div:nth-child(1){background-position:0.5% 50%}
 .gallery div:nth-child(2){background-position:33.6% 50%}
 .gallery div:nth-child(3){background-position:66.8% 50%}
@@ -276,7 +276,7 @@ footer .bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;displa
 <!-- ================= NAV ================= -->
 <nav class="nav" aria-label="Main">
   <div class="wrap">
-    <a href="https://cce.iith.ac.in/" aria-label="CCE IIT Hyderabad home"><img src="img/iith-logo.png" alt="Indian Institute of Technology Hyderabad"></a>
+    <a href="https://cce.iith.ac.in/" aria-label="CCE IIT Hyderabad home"><img src="assets/iith-logo.webp" width="147" height="38" alt="Indian Institute of Technology Hyderabad"></a>
     <ul>
       <li><a href="#about">About</a></li>
       <li><a href="#journey">Programme</a></li>
@@ -372,16 +372,14 @@ footer .bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;displa
     </div>
     <div class="videos reveal" style="margin-top:28px">
       <div class="vcard">
-        <video controls playsinline preload="metadata" poster="img/homepage/home_2.jpg" title="Programme Highlights">
-          <source src="img/gallery/drivingv.mp4" type="video/mp4">
+        <video controls playsinline preload="none" poster="assets/poster-highlights.webp" title="Programme Highlights">
+          <source src="assets/highlights.mp4" type="video/mp4">
         </video>
         <h3>Programme Highlights</h3>
       </div>
       <div class="vcard">
-        <!-- TIP: convert this .MOV to .mp4 (H.264) so it plays in every browser -->
-        <video controls playsinline preload="metadata" poster="img/homepage/home_2.jpg" title="Glimpse from a past cohort">
-          <source src="img/gallery/Cohort 2 Both Days.MOV" type="video/quicktime">
-          <source src="img/gallery/Cohort 2 Both Days.MOV" type="video/mp4">
+                <video controls playsinline preload="none" poster="assets/poster-cohort2.webp" title="Glimpse from a past cohort">
+          <source src="assets/cohort2.mp4" type="video/mp4">
         </video>
         <h3>A glimpse from Cohort 2</h3>
       </div>
@@ -646,7 +644,7 @@ footer .bottom{border-top:1px solid rgba(255,255,255,.1);padding-top:22px;displa
   <div class="wrap">
     <div class="top">
       <div>
-        <div class="logo-w"><img src="img/iith-logo.png" alt="IIT Hyderabad"></div>
+        <div class="logo-w"><img src="assets/iith-logo.webp" width="131" height="34" loading="lazy" alt="IIT Hyderabad"></div>
         <p>Centre for Continuing Education, Indian Institute of Technology Hyderabad. Executive programme by DSSI Studios, Department of Design, in collaboration with iDream.</p>
       </div>
       <div>
