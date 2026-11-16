@@ -1,0 +1,210 @@
+
+<!-- ===================== IITH CCE ASSISTANT CHATBOT ===================== -->
+<style>
+  #cce-bot-launcher{position:fixed;right:22px;bottom:22px;z-index:9999;width:62px;height:62px;border-radius:50%;
+    border:none;cursor:pointer;background:linear-gradient(135deg,#310c97,#5b2fd6);color:#fff;
+    box-shadow:0 8px 24px rgba(49,12,151,.35);display:flex;align-items:center;justify-content:center;transition:transform .2s}
+  #cce-bot-launcher:hover{transform:scale(1.07)}
+  #cce-bot-launcher svg{width:28px;height:28px}
+  #cce-bot-badge{position:absolute;top:-2px;right:-2px;background:#ff5a36;color:#fff;font:600 11px Poppins,sans-serif;
+    border-radius:10px;padding:2px 6px;border:2px solid #fff}
+  #cce-bot-hint{position:fixed;right:94px;bottom:34px;z-index:9998;background:#fff;color:#222;font:500 13px Poppins,sans-serif;
+    padding:9px 14px;border-radius:12px;box-shadow:0 6px 20px rgba(0,0,0,.12);animation:cceFade .4s ease}
+  #cce-bot{position:fixed;right:22px;bottom:96px;z-index:9999;width:370px;max-width:calc(100vw - 32px);height:560px;
+    max-height:calc(100vh - 120px);background:#fff;border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.22);
+    display:none;flex-direction:column;overflow:hidden;font-family:Poppins,system-ui,sans-serif;animation:cceUp .25s ease}
+  #cce-bot.open{display:flex}
+  .cce-head{background:linear-gradient(135deg,#310c97,#5b2fd6);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px}
+  .cce-avatar{width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;
+    justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+  .cce-head h4{margin:0;font-size:15px;font-weight:600;color:#fff}
+  .cce-head small{display:flex;align-items:center;gap:5px;font-size:11.5px;opacity:.85}
+  .cce-head small::before{content:"";width:7px;height:7px;border-radius:50%;background:#3ddc84}
+  .cce-head button{margin-left:auto;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;line-height:1;padding:4px}
+  .cce-body{flex:1;overflow-y:auto;padding:16px 14px;background:#f4f6f9;display:flex;flex-direction:column;gap:10px}
+  .cce-msg{max-width:85%;padding:10px 13px;border-radius:14px;font-size:13.5px;line-height:1.5;color:#222;word-wrap:break-word}
+  .cce-msg.bot{background:#fff;border-bottom-left-radius:4px;align-self:flex-start;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+  .cce-msg.user{background:#310c97;color:#fff;border-bottom-right-radius:4px;align-self:flex-end}
+  .cce-msg a{color:#5b2fd6;font-weight:600}
+  .cce-msg ul{margin:6px 0 0;padding-left:18px}
+  .cce-msg li{margin:2px 0}
+  .cce-chips{display:flex;flex-wrap:wrap;gap:6px;align-self:flex-start}
+  .cce-chip{background:#fff;border:1px solid #d6cdf5;color:#310c97;border-radius:16px;padding:6px 11px;font:500 12px Poppins,sans-serif;cursor:pointer}
+  .cce-chip:hover{background:#310c97;color:#fff}
+  .cce-typing{display:flex;gap:4px;padding:12px 14px}
+  .cce-typing span{width:7px;height:7px;background:#aaa;border-radius:50%;animation:cceDot 1.2s infinite}
+  .cce-typing span:nth-child(2){animation-delay:.2s}.cce-typing span:nth-child(3){animation-delay:.4s}
+  .cce-input{display:flex;gap:8px;padding:10px;border-top:1px solid #eee;background:#fff}
+  .cce-input input{flex:1;border:1px solid #ddd;border-radius:22px;padding:10px 14px;font:13.5px Poppins,sans-serif;outline:none}
+  .cce-input input:focus{border-color:#5b2fd6}
+  .cce-input button{width:40px;height:40px;border-radius:50%;border:none;background:#310c97;color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .cce-foot{font-size:10.5px;color:#999;text-align:center;padding:0 0 8px;background:#fff}
+  @keyframes cceUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+  @keyframes cceFade{from{opacity:0}to{opacity:1}}
+  @keyframes cceDot{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+  @media (max-width:480px){#cce-bot{right:8px;left:8px;width:auto;bottom:88px;height:70vh}#cce-bot-hint{display:none}}
+</style>
+
+<div id="cce-bot-hint">👋 Questions about the programme? Ask me!</div>
+<button id="cce-bot-launcher" aria-label="Open chat assistant">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+  <span id="cce-bot-badge">1</span>
+</button>
+
+<div id="cce-bot" role="dialog" aria-label="IITH CCE Assistant">
+  <div class="cce-head">
+    <div class="cce-avatar">IITH</div>
+    <div><h4>CCE Assistant</h4><small>Online · IIT Hyderabad</small></div>
+    <button id="cce-bot-close" aria-label="Close chat">×</button>
+  </div>
+  <div class="cce-body" id="cce-body"></div>
+  <form class="cce-input" id="cce-form" autocomplete="off">
+    <input id="cce-text" type="text" placeholder="Ask about fees, schedule, IITH…" aria-label="Your message">
+    <button type="submit" aria-label="Send"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+  </form>
+  <div class="cce-foot">Automated assistant · For confirmation call +91 91568 52698</div>
+</div>
+
+<script>
+(function(){
+  const REG = 'https://payments.billdesk.com/bdcollect/bd/iitof/22233';
+  const BROCHURE = 'https://drive.google.com/file/d/163F4t19ZPZzd2JVYvOtp_8s6_1BpzQOP/view';
+
+  // Knowledge base: each entry has keywords (weighted) and an answer.
+  const KB = [
+    {id:'greet', k:['hi','hello','hey','namaste','good morning','good evening'],
+     a:"Hello! 👋 I'm the CCE Assistant. Ask me anything about the <b>Driving Organisational Effectiveness</b> retreat or about IIT Hyderabad.", chips:['What is this programme?','Fees','Schedule','How to register']},
+    {id:'about', k:['~about','~programme','~program','overview','summary','friction','tax','purpose','objective','~retreat','~course','~workshop','tell me'],
+     a:"<b>Driving Organisational Effectiveness Through Employee Experience</b> is a 2‑day immersive executive retreat by <b>DSSI Studios, Department of Design, IIT Hyderabad</b> (with iDream).<br><br>Leaders learn to identify the <b>“Friction Tax”</b> in their organisation (slow approvals, unnecessary meetings, duplicate data entry…), calculate its annual cost with the <b>Friction Cost Formula</b>, and design a tested intervention linking employee experience to the bottom line.", chips:['What will I take away?','Who is it for?','Fees']},
+    {id:'fees', k:['fee','fees','cost','price','pricing','charge','amount','pay','how much','gst','rupees','inr','₹'],
+     a:"The programme fee is <b>₹38,000 (excluding GST)</b>. It includes stay at the IIT Hyderabad campus during the programme.<br><br><a href='"+REG+"' target='_blank'>Register &amp; Pay →</a>", chips:['How to register','Accommodation','Dates']},
+    {id:'register', k:['register','registration','enroll','enrol','apply','sign up','signup','join','book','seat booking','payment link','billdesk'],
+     a:"You can register and pay online via the official IITH BillDesk link:<br><a href='"+REG+"' target='_blank'>Register &amp; Pay →</a><br><br>📅 <b>Last date for registration:</b> 20th November 2026<br>💺 Limited to <b>20 seats</b> only.", chips:['Fees','Contact','Dates']},
+    {id:'deadline', k:['last date','deadline','due','closing date','until when'],
+     a:"The <b>last date for registration is 20th November 2026</b>. Seats are limited to 20, so registering early is recommended.", chips:['How to register','Seats']},
+    {id:'dates', k:['date','dates','when','day','days','month','december','february','check-in','checkout','check out','timing'],
+     a:"The page lists the retreat as a 2‑day programme with check‑in the evening before Day 2 and checkout after Day 3 lunch (Fri check‑in → Sun checkout).<br><br>The fee section mentions stay on <b>December 04–05, 2026</b>. Since the page also shows older dates (Feb 26–28, 2026), please confirm the exact dates by calling <b>+91 91568 52698</b>.", chips:['Schedule','Venue','Contact']},
+    {id:'schedule', k:['schedule','structure','agenda','timetable','itinerary','sessions','plan','flow','phases','phase'],
+     a:"<b>Programme structure</b><ul><li><b>Day 1 (evening):</b> 16:00 check‑in · 19:30 welcome &amp; networking · 20:00 dinner</li><li><b>Day 2:</b> Opening session → Phase 1 <i>Sense</i> → Design Studio visit → Phase 2 <i>Diagnose</i> → Phase 3 <i>Understand</i> → EX Story Competition dinner</li><li><b>Day 3:</b> Optional walk/cycling tour → Phase 4 <i>Ideate</i> → Phases 5–6 <i>Pilot &amp; Implement</i> → Certification → Phase 7 <i>Sustain</i> → Commitment Wall &amp; closing (15:00)</li></ul>", chips:['Day 2 details','Day 3 details','Tools covered']},
+    {id:'day2', k:['day 2','day two','second day','sense','diagnose','understand','journey map'],
+     a:"<b>Day 2</b><ul><li>09:00 Formal welcome by IITH</li><li>09:10 Journey to IIT icebreaker</li><li>09:30 Why Employee Experience Design, Now</li><li>10:45 Phase 1 – Sense (Experience Journey Map + Diagnostic Checklist)</li><li>12:30 Design Studio visit &amp; group photo</li><li>13:15 Lunch</li><li>14:00 Phase 2 – Diagnose (Friction Mapping Canvas)</li><li>15:20 Phase 3 – Understand (Stakeholder Map, Validated Problem Statement)</li><li>16:40 Debrief + Design Sprint brief</li><li>19:30 Informal dinner &amp; EX Story Competition</li></ul>"},
+    {id:'day3', k:['day 3','day three','third day','last day','ideate','pilot','implement','sustain','vibe','scorecard','cycling','walk'],
+     a:"<b>Day 3</b><ul><li>07:00 Optional morning walk / cycling tour</li><li>08:00 Breakfast</li><li>09:30 Overnight reflection</li><li>09:45 Phase 4 – Ideate (EX Ideation Canvas)</li><li>11:05 Phases 5–6 – Pilot &amp; Implement (Pilot Blueprint, VIBE Score, Scaling Decision)</li><li>12:20 Certification · 12:30 Lunch</li><li>13:15 Phase 7 – Sustain (Future Readiness Canvas, EX Process Scorecard)</li><li>14:05 Open sharing · 14:25 Reflection</li><li>15:00 Commitment Wall &amp; closing</li></ul>"},
+    {id:'day1', k:['day 1','day one','first day','arrival','arrive'],
+     a:"<b>Day 1</b> is the arrival evening: 16:00 check‑in &amp; room allocation, 19:30 welcome and getting to know each other, 20:00 dinner."},
+    {id:'takeaway', k:['take away','takeaway','learn','outcome','benefit','gain','get out','deliverable','tools','canvas','canvases','toolkit'],
+     a:"<b>What you'll take away</b><ul><li>10 practical diagnostic &amp; intervention tools / canvases</li><li>A completed diagnosis and a costed <b>Friction Tax</b> figure</li><li>Evidence‑based redesign ideas</li><li>A <b>30‑day pilot plan</b> ready to run</li><li>Completion certificate from IIT Hyderabad</li></ul>Tools include the Experience Journey Map, Friction Mapping Canvas, Stakeholder Map, EX Ideation Canvas, Pilot Blueprint, VIBE Score, Future Readiness Canvas and EX Process Scorecard.", chips:['Certificate','Who is it for?']},
+    {id:'who', k:['~who','eligible','eligibility','audience','suitable','for whom','target','students','hr','leaders','can i attend','qualification'],
+     a:"<b>Who is it for</b><ul><li>Senior &amp; mid‑level leaders</li><li>HR, OD and L&amp;D professionals</li><li>Consultants &amp; workplace strategists</li><li>Corporate real estate leaders</li><li>Faculty &amp; postgraduate students</li></ul>", chips:['Fees','Past participants']},
+    {id:'cert', k:['certificate','certification','certified','credential'],
+     a:"Yes — participants receive a <b>Certificate of Completion from IIT Hyderabad</b>, presented at 12:20 on Day 3."},
+    {id:'seats', k:['seat','seats','capacity','batch size','how many people','participants count','limited'],
+     a:"The retreat is limited to <b>20 seats</b> to keep it highly interactive. Registration closes on 20th November 2026.", chips:['How to register']},
+    {id:'venue', k:['venue','where','location','place','held','dssi','studio','campus'],
+     a:"The retreat is held at <b>DSSI Studios, Department of Design, IIT Hyderabad</b>, on the IITH campus at Kandi, Sangareddy district, Telangana.", chips:['How to reach IITH','Accommodation']},
+    {id:'stay', k:['stay','accommodation','hotel','room','hostel','guest house','lodging','food','meals','dinner','lunch','breakfast'],
+     a:"The fee includes <b>stay on the IIT Hyderabad campus</b> for the programme. Meals are part of the schedule — dinner on Day 1, breakfast, lunch, tea breaks and an informal dinner on Day 2, and breakfast &amp; lunch on Day 3."},
+    {id:'faculty', k:['faculty','trainer','speaker','instructor','teacher','professor','srikar','parthajeet','sarma','facilitator'],
+     a:"<b>Faculty</b><ul><li><b>Asst. Prof. Srikar AVR</b> — IIT Hyderabad · NID · Politecnico di Milano; formerly with Herman Miller, Steelcase, Nokia, DuPont, Godrej</li><li><b>Parthajeet Sarma</b> — Chevening Scholar (Oxford University), 30+ years of workplace transformation experience</li></ul>"},
+    {id:'past', k:['past','previous','cohort','alumni','companies','organisations','organizations','attended','participants','who has been'],
+     a:"Past cohorts included senior leaders from <b>Michael &amp; Susan Dell Foundation, HSBC, Wells Fargo, Google, GAP Inc., Texas Instruments, Bharat Biotech, IDFC First Bank, IIM Vizag, Persistent, Synchrony</b> and more — across BFSI, pharma, tech, social impact and professional services.", chips:['Testimonials']},
+    {id:'testimonials', k:['testimonial','testimonials','review','reviews','feedback','experience of','what people say','opinion'],
+     a:"A few voices from past participants:<ul><li>“The collective aspiration to transform the workplace into a magnet rather than a mandate.” — <i>Amarjeet Singh, Wells Fargo</i></li><li>“10 practical tools — every concept directly translatable into actionable strategies.” — <i>Raviteja Mupparaju, Milestone Technologies</i></li><li>“Some learning experiences don't just give you frameworks — they change how you see collaborative opportunities.” — <i>Biplab Basu, Michael &amp; Susan Dell Foundation</i></li></ul>"},
+    {id:'different', k:['different','unique','~why','special','why join','why attend','advantage'],
+     a:"<b>What makes it different</b><ul><li>Applied, case‑based learning with practical toolkits</li><li>10 tools covering the full employee‑experience lifecycle</li><li>Empathy‑led, evidence‑based frameworks</li><li>Peer learning across sectors</li><li>Certificate from IIT Hyderabad</li></ul>"},
+    {id:'brochure', k:['brochure','pdf','more information','details document','more info','download'],
+     a:"You can view the detailed programme brochure here: <a href='"+BROCHURE+"' target='_blank'>Programme details →</a>"},
+    {id:'contact', k:['contact','phone','call','number','email','reach out','helpline','query','support','whatsapp','mobile'],
+     a:"📞 <b>+91 91568 52698</b><br>You can also visit the Centre for Continuing Education website: <a href='https://cce.iith.ac.in' target='_blank'>cce.iith.ac.in</a>", chips:['How to register']},
+    {id:'refund', k:['refund','cancel','cancellation','transfer','reschedule'],
+     a:"The page does not mention a refund or cancellation policy. Please call <b>+91 91568 52698</b> to confirm before paying."},
+    {id:'online', k:['online','virtual','remote','zoom','hybrid','recorded','recording'],
+     a:"This is an <b>in‑person, residential</b> retreat on the IIT Hyderabad campus — it is not offered online."},
+    {id:'video', k:['video','videos','highlights','glimpse','photos','gallery'],
+     a:"Scroll up on this page to watch the <b>Programme Highlights</b> video and a <b>Glimpse from a past cohort</b>."},
+
+    // ---- General IIT Hyderabad knowledge ----
+    {id:'iith', k:['iith','iit hyderabad','institute','about iit','established','founded','history','iit h'],
+     a:"<b>IIT Hyderabad (IITH)</b> is one of the second‑generation IITs, established in <b>2008</b>. Its permanent campus is at <b>Kandi, Sangareddy district, Telangana</b>, and it was developed with strong academic and industrial collaboration with <b>Japan (JICA)</b>. IITH is known for its research focus, flexible <b>Fractal Academics</b> curriculum and fast‑growing innovation ecosystem.<br><a href='https://iith.ac.in' target='_blank'>iith.ac.in →</a>", chips:['Departments','How to reach IITH','What is CCE?']},
+    {id:'dept', k:['department','departments','branches','courses offered','programs offered','btech','mtech','phd','academics','design department'],
+     a:"IITH departments include <b>Artificial Intelligence</b> (IITH was the first IIT to launch a full B.Tech in AI), Biomedical Engg., Biotechnology, Chemical Engg., Chemistry, Civil Engg., Computer Science &amp; Engg., <b>Design</b>, Electrical Engg., Engineering Science, Entrepreneurship &amp; Management, Liberal Arts, Materials Science &amp; Metallurgical Engg., Mathematics, Mechanical &amp; Aerospace Engg., Physics, and Climate Change.<br>For the latest list: <a href='https://iith.ac.in' target='_blank'>iith.ac.in</a>"},
+    {id:'reach', k:['reach','how to reach','travel','airport','railway','station','bus','distance','directions','route','map','get there'],
+     a:"IITH is at <b>Kandi, Sangareddy</b>, on the Mumbai highway (NH‑65), roughly <b>60 km from Hyderabad city</b>.<ul><li>✈️ Nearest airport: Rajiv Gandhi International Airport, Shamshabad (~1.5–2 hrs by road)</li><li>🚆 Major stations: Secunderabad, Hyderabad (Nampally) and Lingampally</li></ul><a href='https://maps.google.com/?q=IIT+Hyderabad' target='_blank'>Open in Google Maps →</a>"},
+    {id:'cce', k:['cce','continuing education','centre for continuing','other programmes','other courses','executive education','more programs','other events'],
+     a:"The <b>Centre for Continuing Education (CCE), IIT Hyderabad</b> offers executive programmes, short‑term courses and certifications for working professionals. See all current offerings at <a href='https://cce.iith.ac.in' target='_blank'>cce.iith.ac.in</a>."},
+    {id:'admission', k:['admission','jee','gate','jam','cutoff','placement','placements','hostel fee','semester fee'],
+     a:"For regular admissions (B.Tech via JEE Advanced, M.Tech via GATE, PhD etc.), placements and academic fees, please check the official IITH website: <a href='https://iith.ac.in' target='_blank'>iith.ac.in</a>. I'm best at answering questions about this executive programme!"},
+    {id:'thanks', k:['thanks','thank you','thx','great','awesome','ok','okay','cool','bye','goodbye'],
+     a:"You're welcome! 😊 If you're ready, you can <a href='"+REG+"' target='_blank'>register here</a>. Anything else I can help with?"}
+  ];
+
+  const CHIP_MAP = {'What is this programme?':'about','Fees':'fees','Schedule':'schedule','How to register':'register','What will I take away?':'takeaway',
+    'Who is it for?':'who','Accommodation':'stay','Dates':'dates','Contact':'contact','Seats':'seats','Venue':'venue','Day 2 details':'day2',
+    'Day 3 details':'day3','Tools covered':'takeaway','Certificate':'cert','Past participants':'past','Testimonials':'testimonials',
+    'How to reach IITH':'reach','Departments':'dept','What is CCE?':'cce'};
+
+  const norm = s => s.toLowerCase().replace(/[^a-z0-9₹\s-]/g,' ').replace(/\s+/g,' ').trim();
+
+  function score(q, entry){
+    const nq = ' '+norm(q)+' ';
+    let s = 0;
+    for(const kw of entry.k){
+      const weak = kw[0]==='~'; const nk = norm(weak?kw.slice(1):kw); if(!nk) continue;
+      if(weak){ if(nq.includes(' '+nk+' ')) s += 1; continue; }
+      if(nq.includes(' '+nk+' ')) s += nk.includes(' ') ? 3 : 2;      // whole word / phrase
+      else if(nk.length>3 && nq.includes(nk)) s += 1;                  // partial
+    }
+    return s;
+  }
+
+  function answer(q){
+    let best=null, bestS=0;
+    for(const e of KB){ const s=score(q,e); if(s>bestS){bestS=s;best=e;} }
+    if(best && bestS>=2) return best;
+    return {a:"I'm not sure about that one. I can help with the programme's <b>fees, dates, schedule, venue, faculty, registration</b> or general info about <b>IIT Hyderabad</b>.<br><br>For anything else, please call <b>+91 91568 52698</b>.",
+            chips:['Fees','Schedule','How to register','About IITH']};
+  }
+  CHIP_MAP['About IITH']='iith';
+
+  const box=document.getElementById('cce-bot'), body=document.getElementById('cce-body'),
+        form=document.getElementById('cce-form'), input=document.getElementById('cce-text'),
+        hint=document.getElementById('cce-bot-hint'), badge=document.getElementById('cce-bot-badge');
+  let started=false;
+
+  function add(html, who){
+    const d=document.createElement('div'); d.className='cce-msg '+who;
+    if(who==='user') d.textContent=html; else d.innerHTML=html;
+    body.appendChild(d); body.scrollTop=body.scrollHeight;
+  }
+  function chips(list){
+    if(!list) return;
+    const w=document.createElement('div'); w.className='cce-chips';
+    list.forEach(c=>{const b=document.createElement('button');b.type='button';b.className='cce-chip';b.textContent=c;
+      b.onclick=()=>{w.remove();ask(c,CHIP_MAP[c]);};w.appendChild(b);});
+    body.appendChild(w); body.scrollTop=body.scrollHeight;
+  }
+  function reply(entry){
+    const t=document.createElement('div'); t.className='cce-msg bot cce-typing'; t.innerHTML='<span></span><span></span><span></span>';
+    body.appendChild(t); body.scrollTop=body.scrollHeight;
+    setTimeout(()=>{t.remove(); add(entry.a,'bot'); chips(entry.chips);}, 450+Math.random()*350);
+  }
+  function ask(text, id){
+    body.querySelectorAll('.cce-chips').forEach(c=>c.remove());
+    add(text,'user');
+    reply(id ? KB.find(e=>e.id===id) : answer(text));
+  }
+  function open(){
+    box.classList.add('open'); hint && hint.remove(); badge && badge.remove();
+    if(!started){started=true;
+      add("Hi! 👋 I'm the <b>IITH CCE Assistant</b>. I can answer questions about the <b>Driving Organisational Effectiveness</b> retreat and about IIT Hyderabad. What would you like to know?",'bot');
+      chips(['What is this programme?','Fees','Schedule','How to register','About IITH']);
+    }
+    setTimeout(()=>input.focus(),100);
+  }
+  document.getElementById('cce-bot-launcher').onclick=()=> box.classList.contains('open') ? box.classList.remove('open') : open();
+  document.getElementById('cce-bot-close').onclick=()=>box.classList.remove('open');
+  form.onsubmit=e=>{e.preventDefault(); const v=input.value.trim(); if(!v) return; input.value=''; ask(v);};
+  setTimeout(()=>{hint && hint.remove();}, 9000);
+})();
+</script>
+<!-- =================== END IITH CCE ASSISTANT CHATBOT =================== -->
